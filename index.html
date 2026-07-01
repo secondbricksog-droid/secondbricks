@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SecondBricks & More – Seltenes & gebrauchtes LEGO</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --red:    #e3000b;
+      --yellow: #f7d117;
+      --navy:   #1a1a2e;
+      --dark:   #16213e;
+      --light:  #f8f8f6;
+      --mid:    #6b7280;
+      --white:  #ffffff;
+      --radius: 8px;
+      --max:    1100px;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--white); color: var(--navy); line-height: 1.7; }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: var(--navy);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 2rem; height: 68px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.3);
+    }
+    .nav-logo {
+      display: flex; align-items: center; gap: 0.6rem;
+      text-decoration: none;
+    }
+    .nav-logo-icon {
+      width: 42px; height: 42px; background: var(--yellow);
+      border-radius: 6px; display: flex; align-items: center; justify-content: center;
+      font-size: 1.4rem; font-weight: 900; color: var(--navy); letter-spacing: -1px;
+    }
+    .nav-logo-text { line-height: 1.1; }
+    .nav-logo-text .name { color: var(--white); font-size: 1.05rem; font-weight: 800; }
+    .nav-logo-text .sub { color: var(--yellow); font-size: 0.72rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; }
+    .nav-links { display: flex; gap: 0; list-style: none; }
+    .nav-links a {
+      color: #c9d1da; text-decoration: none; font-size: 0.9rem;
+      font-weight: 500; padding: 0.4rem 0.9rem; border-radius: 4px; transition: all .2s;
+    }
+    .nav-links a:hover, .nav-links a.active { color: var(--yellow); background: rgba(247,209,23,0.1); }
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; padding: 4px; }
+    .hamburger span { display: block; width: 24px; height: 2px; background: var(--white); border-radius: 2px; }
+    .mobile-menu { display: none; position: fixed; top: 68px; left: 0; right: 0; background: var(--navy); padding: 1.5rem 2rem; z-index: 99; flex-direction: column; gap: 1rem; border-top: 1px solid rgba(255,255,255,0.1); }
+    .mobile-menu a { color: #c9d1da; text-decoration: none; font-size: 1rem; font-weight: 500; padding: 0.3rem 0; }
+    .mobile-menu a:hover { color: var(--yellow); }
+    .mobile-menu.open { display: flex; }
+    @media (max-width: 700px) { .nav-links { display: none; } .hamburger { display: flex; } }
+
+    /* ── PAGES ── */
+    .page { display: none; padding-top: 68px; min-height: 100vh; }
+    .page.active { display: block; }
+
+    /* ── HERO ── */
+    .hero {
+      background: var(--navy); color: var(--white);
+      min-height: calc(100vh - 68px);
+      display: flex; align-items: center; justify-content: center;
+      text-align: center; padding: 4rem 2rem; position: relative; overflow: hidden;
+    }
+    .hero::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 50% 60%, rgba(247,209,23,0.12) 0%, transparent 65%);
+      pointer-events: none;
+    }
+    .hero-inner { position: relative; max-width: 700px; }
+    .hero-badge {
+      display: inline-block; background: var(--yellow); color: var(--navy);
+      font-size: 0.78rem; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase;
+      padding: 0.3rem 1rem; border-radius: 20px; margin-bottom: 1.5rem;
+    }
+    .hero-inner h1 { font-size: clamp(2rem, 6vw, 3.5rem); font-weight: 900; line-height: 1.1; margin-bottom: 1rem; }
+    .hero-inner h1 span { color: var(--yellow); }
+    .hero-inner p { font-size: 1.1rem; color: #a8b4c0; margin-bottom: 2.5rem; max-width: 520px; margin-left: auto; margin-right: auto; }
+    .btn { display: inline-block; padding: 0.85rem 2rem; background: var(--red); color: var(--white); text-decoration: none; border-radius: var(--radius); font-weight: 700; font-size: 1rem; transition: background .2s, transform .15s; cursor: pointer; border: none; font-family: inherit; }
+    .btn:hover { background: #b8000a; transform: translateY(-2px); }
+    .btn-yellow { background: var(--yellow); color: var(--navy); }
+    .btn-yellow:hover { background: #e6c210; }
+    .btn-ghost { background: transparent; border: 2px solid rgba(255,255,255,0.3); margin-left: 0.75rem; }
+    .btn-ghost:hover { background: rgba(255,255,255,0.08); transform: translateY(-2px); }
+
+    /* ── SECTIONS ── */
+    .section { padding: 5rem 2rem; }
+    .container { max-width: var(--max); margin: 0 auto; }
+    .section-label { font-size: 0.78rem; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--red); margin-bottom: 0.4rem; }
+    h2 { font-size: clamp(1.6rem, 4vw, 2.3rem); font-weight: 800; line-height: 1.2; margin-bottom: 1rem; }
+    .divider { width: 44px; height: 4px; background: var(--yellow); border-radius: 2px; margin-bottom: 1.8rem; }
+
+    /* ── HOME FEATURES ── */
+    .features { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 1.5rem; margin-top: 1rem; }
+    .feature-card { background: var(--light); border-radius: 10px; padding: 2rem 1.5rem; border-left: 4px solid var(--yellow); }
+    .feature-icon { font-size: 2rem; margin-bottom: 0.75rem; }
+    .feature-card h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: 0.4rem; }
+    .feature-card p { color: var(--mid); font-size: 0.93rem; }
+
+    /* ── GARANTIE BANNER ── */
+    .garantie-banner {
+      background: var(--navy); color: var(--white);
+      padding: 3rem 2rem; text-align: center; margin: 0;
+    }
+    .garantie-banner h2 { color: var(--yellow); margin-bottom: 0.5rem; }
+    .garantie-banner p { color: #a8b4c0; max-width: 580px; margin: 0 auto 1.5rem; }
+
+    /* ── KONTAKT FORMULAR ── */
+    .kontakt-section { background: var(--light); }
+    .kontakt-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: start; margin-top: 1rem; }
+    .kontakt-info p { color: #374151; margin-bottom: 1rem; font-size: 1rem; }
+    .contact-item { display: flex; align-items: flex-start; gap: 0.75rem; margin-bottom: 1rem; }
+    .contact-icon { font-size: 1.2rem; flex-shrink: 0; }
+    .contact-item a { color: var(--navy); text-decoration: none; font-weight: 500; }
+    .contact-item a:hover { color: var(--red); }
+    form { display: flex; flex-direction: column; gap: 0.85rem; }
+    input, textarea, select {
+      background: var(--white); border: 1.5px solid #d1d5db;
+      border-radius: var(--radius); padding: 0.8rem 1rem;
+      color: var(--navy); font-size: 0.97rem; font-family: inherit;
+      transition: border-color .2s;
+    }
+    input:focus, textarea:focus, select:focus { outline: none; border-color: var(--red); }
+    textarea { min-height: 120px; resize: vertical; }
+    .form-success { display: none; background: #dcfce7; border: 1px solid #16a34a; border-radius: var(--radius); padding: 1rem; color: #15803d; text-align: center; }
+    @media (max-width: 680px) { .kontakt-grid { grid-template-columns: 1fr; } }
+
+    /* ── ÜBER UNS ── */
+    .ueber-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: center; margin-top: 1rem; }
+    .ueber-text p { color: #374151; margin-bottom: 1rem; font-size: 1.02rem; }
+    .ueber-visual { background: var(--navy); border-radius: 12px; padding: 2.5rem; color: var(--white); text-align: center; }
+    .ueber-visual .big { font-size: 3rem; font-weight: 900; color: var(--yellow); line-height: 1; }
+    .ueber-visual .sub { font-size: 0.85rem; color: #a8b4c0; margin-top: 0.3rem; }
+    .ueber-stats { display: flex; gap: 1.5rem; margin-top: 2rem; justify-content: center; flex-wrap: wrap; }
+    .stat { text-align: center; }
+    .stat .num { font-size: 1.8rem; font-weight: 900; color: var(--yellow); }
+    .stat .desc { font-size: 0.78rem; color: #a8b4c0; }
+    @media (max-width: 680px) { .ueber-grid { grid-template-columns: 1fr; } }
+
+    /* ── SHOP ── */
+    .shop-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem; margin-top: 1rem; }
+    .shop-card { border: 2px solid #e5e7eb; border-radius: 12px; padding: 2rem; transition: all .2s; text-align: center; }
+    .shop-card:hover { border-color: var(--yellow); box-shadow: 0 8px 32px rgba(0,0,0,0.1); transform: translateY(-4px); }
+    .shop-card .shop-icon { font-size: 3rem; margin-bottom: 1rem; }
+    .shop-card h3 { font-size: 1.2rem; font-weight: 800; margin-bottom: 0.5rem; }
+    .shop-card p { color: var(--mid); font-size: 0.93rem; margin-bottom: 1.5rem; }
+    .shop-card .status { display: inline-block; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; padding: 0.2rem 0.7rem; border-radius: 20px; margin-bottom: 0.75rem; }
+    .status-live { background: #dcfce7; color: #15803d; }
+    .status-soon { background: #fef9c3; color: #854d0e; }
+
+    /* ── FAQ ── */
+    .faq-list { margin-top: 1rem; display: flex; flex-direction: column; gap: 1rem; }
+    .faq-item { border: 1.5px solid #e5e7eb; border-radius: 10px; overflow: hidden; }
+    .faq-question {
+      width: 100%; text-align: left; padding: 1.2rem 1.5rem;
+      background: none; border: none; cursor: pointer; font-family: inherit;
+      font-size: 1rem; font-weight: 700; color: var(--navy);
+      display: flex; justify-content: space-between; align-items: center; gap: 1rem;
+    }
+    .faq-question:hover { background: var(--light); }
+    .faq-chevron { font-size: 1.2rem; transition: transform .3s; flex-shrink: 0; }
+    .faq-answer { display: none; padding: 0 1.5rem 1.2rem; color: #374151; font-size: 0.97rem; line-height: 1.7; }
+    .faq-item.open .faq-answer { display: block; }
+    .faq-item.open .faq-chevron { transform: rotate(180deg); }
+    .faq-item.open .faq-question { background: var(--light); }
+
+    /* ── IMPRESSUM / DATENSCHUTZ ── */
+    .legal-content { max-width: 780px; margin: 0 auto; }
+    .legal-content h3 { font-size: 1.1rem; font-weight: 700; margin: 2rem 0 0.5rem; color: var(--navy); }
+    .legal-content p { color: #374151; margin-bottom: 0.75rem; font-size: 0.97rem; }
+    .legal-content ul { margin: 0.5rem 0 1rem 1.5rem; color: #374151; font-size: 0.97rem; }
+    .legal-content a { color: var(--red); }
+    .legal-box { background: var(--light); border-radius: 10px; padding: 1.5rem 2rem; margin-bottom: 2rem; }
+    .legal-box p { margin: 0.25rem 0; font-size: 0.97rem; color: #374151; }
+    .legal-box strong { color: var(--navy); }
+
+    /* ── ANKAUF FORMULAR ── */
+    .ankauf-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+    @media (max-width: 680px) { .ankauf-grid { grid-template-columns: 1fr; } }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--dark); color: #6b7280;
+      padding: 2.5rem 2rem 1.5rem;
+    }
+    .footer-inner { max-width: var(--max); margin: 0 auto; display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 2rem; margin-bottom: 2rem; }
+    .footer-brand .name { color: var(--white); font-size: 1.1rem; font-weight: 800; margin-bottom: 0.4rem; }
+    .footer-brand p { font-size: 0.88rem; line-height: 1.6; }
+    .footer-col h4 { color: var(--white); font-size: 0.88rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 0.75rem; }
+    .footer-col a { display: block; color: #6b7280; text-decoration: none; font-size: 0.88rem; margin-bottom: 0.4rem; }
+    .footer-col a:hover { color: var(--yellow); }
+    .footer-bottom { border-top: 1px solid rgba(255,255,255,0.08); padding-top: 1.2rem; text-align: center; font-size: 0.82rem; }
+    .footer-bottom a { color: #6b7280; text-decoration: none; margin: 0 0.5rem; }
+    .footer-bottom a:hover { color: var(--yellow); }
+    @media (max-width: 680px) { .footer-inner { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo" onclick="showPage('home')">
+    <div class="nav-logo-icon">🧱</div>
+    <div class="nav-logo-text">
+      <div class="name">SecondBricks</div>
+      <div class="sub">& More</div>
+    </div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#" onclick="showPage('home')" id="nav-home" class="active">Start</a></li>
+    <li><a href="#" onclick="showPage('ueber')" id="nav-ueber">Über Uns</a></li>
+    <li><a href="#" onclick="showPage('shop')" id="nav-shop">Shop</a></li>
+    <li><a href="#" onclick="showPage('faq')" id="nav-faq">FAQ</a></li>
+    <li><a href="#" onclick="showPage('kontakt')" id="nav-kontakt">Kontakt</a></li>
+    <li><a href="#" onclick="showPage('impressum')" id="nav-impressum">Impressum</a></li>
+    <li><a href="#" onclick="showPage('datenschutz')" id="nav-datenschutz">Datenschutz</a></li>
+  </ul>
+  <button class="hamburger" onclick="toggleMenu()" aria-label="Menü">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#" onclick="showPage('home');toggleMenu()">Start</a>
+  <a href="#" onclick="showPage('ueber');toggleMenu()">Über Uns</a>
+  <a href="#" onclick="showPage('shop');toggleMenu()">Shop</a>
+  <a href="#" onclick="showPage('faq');toggleMenu()">FAQ</a>
+  <a href="#" onclick="showPage('kontakt');toggleMenu()">Kontakt</a>
+  <a href="#" onclick="showPage('impressum');toggleMenu()">Impressum</a>
+  <a href="#" onclick="showPage('datenschutz');toggleMenu()">Datenschutz</a>
+</div>
+
+<!-- ═══════════════ STARTSEITE ═══════════════ -->
+<div class="page active" id="page-home">
+
+  <div class="hero">
+    <div class="hero-inner">
+      <div class="hero-badge">🧱 Gebrauchtes LEGO neu entdecken</div>
+      <h1>Seltenes LEGO.<br><span>Faire Preise.</span></h1>
+      <p>Als lokaler Anbieter in Fürstenfeld bieten wir gebrauchte und seltene LEGO-Sets sowie über 450.000 Einzelteile – mit der SecondBricks-Vollständigkeitsgarantie.</p>
+      <a href="#" class="btn btn-yellow" onclick="showPage('shop')">Zum Shop</a>
+      <a href="#" class="btn btn-ghost" onclick="showPage('ueber')">Mehr erfahren</a>
+    </div>
+  </div>
+
+  <div class="section" style="background: var(--white);">
+    <div class="container">
+      <p class="section-label">Worum es bei uns geht</p>
+      <h2>Wir haben viel im Angebot</h2>
+      <div class="divider"></div>
+      <p style="color:#374151; max-width:680px; margin-bottom:2.5rem; font-size:1.02rem;">Als lokaler Anbieter bieten wir unseren Kunden in erster Linie seltenes und gebrauchtes LEGO. Alle unsere gebrauchten Sets kommen mit der SecondBricks-Vollständigkeitsgarantie. Sollte einmal trotz sorgfältigster Kontrolle ein Teil fehlen, wird es selbstverständlich kostenfrei nachgeliefert.<br><br>Im März 2026 haben wir uns außerdem entschlossen, unseren Bestand auf LEGO-Einzelteile zu erweitern, und haben über 450.000 Einzelteile in unseren Shop aufgenommen.</p>
+      <div class="features">
+        <div class="feature-card">
+          <div class="feature-icon">✅</div>
+          <h3>Vollständigkeitsgarantie</h3>
+          <p>Jedes gebrauchte Set wird sorgfältig geprüft. Fehlt ein Teil, liefern wir es kostenlos nach.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🧩</div>
+          <h3>450.000+ Einzelteile</h3>
+          <p>Seit März 2026 auch ein riesiges Sortiment an LEGO-Einzelteilen für jeden Bedarf.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">♻️</div>
+          <h3>Nachhaltig & günstig</h3>
+          <p>Gebrauchtem LEGO eine zweite Heimat geben – im Sinne der Nachhaltigkeit und Ihres Budgets.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">📍</div>
+          <h3>Lokal in Fürstenfeld</h3>
+          <p>Persönliche Abholung möglich – wir sind ein lokaler Betrieb mit direktem Kundenkontakt.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="garantie-banner">
+    <p class="section-label" style="color:var(--yellow);">Unser Versprechen</p>
+    <h2>SecondBricks-Vollständigkeitsgarantie</h2>
+    <p>Wir kontrollieren jedes Set sorgfältigst. Sollte dennoch ein Teil fehlen, schicken wir es Ihnen selbstverständlich kostenfrei zu – ohne Wenn und Aber.</p>
+    <a href="#" class="btn btn-yellow" onclick="showPage('shop')">Sets entdecken</a>
+  </div>
+
+  <div class="section kontakt-section" id="home-kontakt">
+    <div class="container">
+      <p class="section-label">Kontakt</p>
+      <h2>Nehmen Sie Kontakt auf</h2>
+      <div class="divider"></div>
+      <div class="kontakt-grid">
+        <div class="kontakt-info">
+          <p>Haben Sie Fragen, Kommentare oder Anregungen? Wir freuen uns über Ihre Nachricht und melden uns schnellstmöglich zurück.</p>
+          <div class="contact-item"><span class="contact-icon">📧</span><div><strong>E-Mail</strong><br><a href="mailto:secondbricksog@gmail.com">secondbricksog@gmail.com</a></div></div>
+          <div class="contact-item"><span class="contact-icon">📞</span><div><strong>Telefon</strong><br><a href="tel:+436642605426">0664 2605426</a></div></div>
+          <div class="contact-item"><span class="contact-icon">📍</span><div><strong>Adresse</strong><br>Breitenweg 13, 8280 Fürstenfeld</div></div>
+          <div class="contact-item"><span class="contact-icon">📘</span><div><strong>Facebook</strong><br><a href="https://www.facebook.com/profile.php?id=100091775091211" target="_blank">SecondBricks & More</a></div></div>
+        </div>
+        <div>
+          <form onsubmit="handleSubmit(event, 'homeSuccess')">
+            <input type="text" placeholder="Ihr Name" required />
+            <input type="email" placeholder="E-Mail-Adresse" required />
+            <input type="tel" placeholder="Telefonnummer (optional)" />
+            <input type="text" placeholder="Betreff" />
+            <textarea placeholder="Ihre Nachricht …" required></textarea>
+            <button type="submit" class="btn">Absenden</button>
+          </form>
+          <div class="form-success" id="homeSuccess">✅ Danke für Ihre Nachricht! Wir melden uns bald.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ ÜBER UNS ═══════════════ -->
+<div class="page" id="page-ueber">
+  <div class="section" style="background: var(--light);">
+    <div class="container">
+      <div class="ueber-grid">
+        <div class="ueber-text">
+          <p class="section-label">Über Uns</p>
+          <h2>Unsere Geschichte</h2>
+          <div class="divider"></div>
+          <p>Seit unser Unternehmen 2023 gegründet wurde, haben wir ein Ziel vor Augen: stets eine Vielfalt an Artikeln sowie seltene LEGO-Sets anzubieten, die zu jedem Budget passen.</p>
+          <p>Wir möchten gerne eine Alternative zu den üblichen großen Spielzeug-Ketten sein, und gleichzeitig im Sinne des Nachhaltigkeitsgedankens gebrauchtem LEGO eine zweite Heimat geben. Neu aufbereitet, gereinigt und mit der SecondBricks-Vollständigkeitsgarantie.</p>
+          <p>Unser Sortiment ändert sich alle paar Wochen, also ruhig unsere Seite bookmarken und öfter mal vorbeischauen. Wenn Sie Fragen, Kommentare oder Anregungen haben, zögern Sie nicht, uns zu kontaktieren.</p>
+          <a href="#" class="btn" style="margin-top:1rem;" onclick="showPage('kontakt')">Kontakt aufnehmen</a>
+        </div>
+        <div class="ueber-visual">
+          <div class="big">🧱</div>
+          <div class="big" style="font-size:2rem; margin-top:0.5rem;">SecondBricks</div>
+          <div class="sub">& More · Seit 2023</div>
+          <div class="ueber-stats">
+            <div class="stat"><div class="num">2023</div><div class="desc">Gründungsjahr</div></div>
+            <div class="stat"><div class="num">450K+</div><div class="desc">Einzelteile</div></div>
+            <div class="stat"><div class="num">100%</div><div class="desc">Garantie</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section" style="background: var(--white);">
+    <div class="container">
+      <p class="section-label">Unser Team</p>
+      <h2>Persönlich & verlässlich</h2>
+      <div class="divider"></div>
+      <div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(260px,1fr)); gap:1.5rem; margin-top:1rem;">
+        <div class="feature-card">
+          <div class="feature-icon">👤</div>
+          <h3>David Schlener</h3>
+          <p>Persönlich haftender Gesellschafter · Ihr Ansprechpartner rund um LEGO-Sets und Einzelteile.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">👤</div>
+          <h3>Jennifer Stampfer</h3>
+          <p>Persönlich haftende Gesellschafterin · Für alle Fragen zu Ankauf, Verkauf und Abwicklung.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="garantie-banner">
+    <p class="section-label" style="color:var(--yellow);">Nachhaltigkeit</p>
+    <h2>LEGO verdient eine zweite Chance</h2>
+    <p>Gebrauchtem Spielzeug neues Leben einhauchen – das ist unser Antrieb. Jedes Set wird gereinigt, vollständig geprüft und liebevoll aufbereitet, bevor es zu Ihnen kommt.</p>
+  </div>
+</div>
+
+<!-- ═══════════════ SHOP ═══════════════ -->
+<div class="page" id="page-shop">
+  <div class="section" style="background: var(--white);">
+    <div class="container">
+      <p class="section-label">Shop</p>
+      <h2>Hier finden Sie Ihre Lieblingsartikel</h2>
+      <div class="divider"></div>
+      <p style="color:#374151; max-width:640px; margin-bottom:2.5rem; font-size:1.02rem;">Momentan finden Sie alle unsere Produkte auf Bricklink. Der eBay- und Willhaben-Shop wird aber auch zeitnah wieder befüllt werden – er wird dann natürlich hier verlinkt.</p>
+      <div class="shop-cards">
+        <div class="shop-card">
+          <div class="shop-icon">🟠</div>
+          <span class="status status-live">🟢 Online & aktiv</span>
+          <h3>Bricklink Shop</h3>
+          <p>Unser Hauptshop mit gebrauchten LEGO-Sets und über 450.000 Einzelteilen. Sicher einkaufen, schnelle Lieferung.</p>
+          <a href="https://store.bricklink.com/WSOSerious" target="_blank" class="btn btn-yellow">Zum Bricklink Shop →</a>
+        </div>
+        <div class="shop-card">
+          <div class="shop-icon">🔵</div>
+          <span class="status status-soon">🟡 Demnächst</span>
+          <h3>eBay Shop</h3>
+          <p>Unser eBay-Shop wird bald wieder mit neuen Angeboten befüllt. Schaut bald wieder vorbei!</p>
+          <span class="btn" style="opacity:0.5; cursor:default; background:var(--mid);">Bald verfügbar</span>
+        </div>
+        <div class="shop-card">
+          <div class="shop-icon">🟣</div>
+          <span class="status status-soon">🟡 Demnächst</span>
+          <h3>Willhaben Shop</h3>
+          <p>Auch auf Willhaben werden wir unsere Angebote bald wieder online stellen. Bleibt dran!</p>
+          <span class="btn" style="opacity:0.5; cursor:default; background:var(--mid);">Bald verfügbar</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section" style="background: var(--light);">
+    <div class="container">
+      <p class="section-label">Ankauf</p>
+      <h2>Sie möchten LEGO verkaufen?</h2>
+      <div class="divider"></div>
+      <p style="color:#374151; max-width:640px; margin-bottom:2rem; font-size:1.02rem;">Gerne kaufen wir auch Ihr gebrauchtes LEGO an! Füllen Sie einfach das Ankaufsformular aus – wir melden uns innerhalb einer Woche mit einem Angebot.</p>
+      <div class="ankauf-grid">
+        <div>
+          <form onsubmit="handleSubmit(event, 'ankaufSuccess')">
+            <input type="text" placeholder="Ihr Name" required />
+            <input type="email" placeholder="E-Mail-Adresse" required />
+            <input type="tel" placeholder="Telefonnummer" />
+            <input type="text" placeholder="Set-Nummern (z.B. 75192, 10179, ...)" required />
+            <select>
+              <option value="">Vollständigkeit der Sets?</option>
+              <option>Vollständig & sortiert</option>
+              <option>Vollständig, unsortiert</option>
+              <option>Nicht vollständig</option>
+              <option>Gemischt / unbekannt</option>
+            </select>
+            <select>
+              <option value="">Anleitungen vorhanden?</option>
+              <option>Ja, alle Anleitungen dabei</option>
+              <option>Teilweise</option>
+              <option>Keine Anleitungen</option>
+            </select>
+            <select>
+              <option value="">Originalverpackung?</option>
+              <option>Ja, mit OVP</option>
+              <option>Teilweise</option>
+              <option>Ohne Verpackung</option>
+            </select>
+            <textarea placeholder="Zusätzliche Informationen oder Anmerkungen …"></textarea>
+            <button type="submit" class="btn btn-yellow">Ankaufsanfrage senden</button>
+          </form>
+          <div class="form-success" id="ankaufSuccess">✅ Danke! Wir melden uns innerhalb einer Woche mit einem Angebot.</div>
+        </div>
+        <div>
+          <div class="feature-card" style="margin-bottom:1rem;">
+            <div class="feature-icon">📋</div>
+            <h3>Was wir benötigen</h3>
+            <p>Set-Nummern, Vollständigkeit, ob mit Anleitung und/oder Originalverpackung. Je mehr Infos, desto schneller das Angebot.</p>
+          </div>
+          <div class="feature-card" style="margin-bottom:1rem;">
+            <div class="feature-icon">⏱️</div>
+            <h3>Wie lange dauert es?</h3>
+            <p>Wenn wir Interesse haben, erhalten Sie innerhalb einer Woche ein Kaufangebot. Andernfalls schreiben wir Ihnen natürlich trotzdem.</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">💶</div>
+            <h3>Zahlung</h3>
+            <p>Barzahlung bei Abholung, PayPal oder Banküberweisung – ganz wie Sie möchten.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ FAQ ═══════════════ -->
+<div class="page" id="page-faq">
+  <div class="section" style="background: var(--white);">
+    <div class="container">
+      <p class="section-label">FAQ</p>
+      <h2>Hier findest du die Antworten</h2>
+      <div class="divider"></div>
+      <div class="faq-list">
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            Kann ich auch mein gebrauchtes LEGO an SecondBricks & More verkaufen?
+            <span class="faq-chevron">▼</span>
+          </button>
+          <div class="faq-answer">Gerne. Bitte nutzen Sie hierfür unser Ankaufsformular im Shop-Bereich. Wichtig sind: die Set-Nummern, ob die Sets vollständig sind, ob sie sortiert sind oder nicht, ob eine Anleitung und/oder Originalverpackung dabei ist. Wenn wir Interesse haben, kommt innerhalb einer Woche ein Kaufangebot – ansonsten schreiben wir Ihnen natürlich trotzdem.</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            Wie lange dauert die Lieferung?
+            <span class="faq-chevron">▼</span>
+          </button>
+          <div class="faq-answer">Sobald die Bestellung bei uns eingegangen ist, wird die Ware bereits vorbereitet und geht entweder am selben Tag oder am Tag danach verlässlich zur Post.</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            Welche Zahlungsmethoden akzeptieren Sie?
+            <span class="faq-chevron">▼</span>
+          </button>
+          <div class="faq-answer">Wir akzeptieren Barzahlung im Shop in Fürstenfeld, PayPal sowie Banküberweisung (IBAN: AT15 2081 5000 4486 4015).</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            Was bedeutet die SecondBricks-Vollständigkeitsgarantie?
+            <span class="faq-chevron">▼</span>
+          </button>
+          <div class="faq-answer">Alle unsere gebrauchten Sets werden sorgfältig auf Vollständigkeit geprüft. Sollte trotz gewissenhafter Kontrolle einmal ein Teil fehlen, wird es selbstverständlich kostenfrei nachgeliefert – ohne Diskussion.</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            Kann ich die Sets persönlich abholen?
+            <span class="faq-chevron">▼</span>
+          </button>
+          <div class="faq-answer">Ja, persönliche Abholung ist möglich. Wir befinden uns in Fürstenfeld (Breitenweg 13, 8280 Fürstenfeld). Bitte nehmen Sie vorher Kontakt auf, um einen Termin zu vereinbaren.</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            Wie oft ändert sich das Sortiment?
+            <span class="faq-chevron">▼</span>
+          </button>
+          <div class="faq-answer">Unser Sortiment ändert sich alle paar Wochen. Wir empfehlen, die Seite zu bookmarken und regelmäßig vorbeizuschauen, um keine Neuheiten zu verpassen!</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            Verkaufen Sie auch LEGO-Einzelteile?
+            <span class="faq-chevron">▼</span>
+          </button>
+          <div class="faq-answer">Ja! Seit März 2026 haben wir unser Sortiment auf LEGO-Einzelteile erweitert und über 450.000 Einzelteile in unseren Bricklink-Shop aufgenommen. Ideal für MOC-Bauer und alle, die spezifische Teile suchen.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ KONTAKT ═══════════════ -->
+<div class="page" id="page-kontakt">
+  <div class="section kontakt-section">
+    <div class="container">
+      <p class="section-label">Kontakt</p>
+      <h2>Wir freuen uns von Ihnen zu hören</h2>
+      <div class="divider"></div>
+      <div class="kontakt-grid">
+        <div class="kontakt-info">
+          <p>Haben Sie Fragen zu unseren Produkten, möchten Sie ein Set reservieren oder Ihr LEGO verkaufen? Schreiben Sie uns einfach – wir antworten schnell und unkompliziert.</p>
+          <div class="contact-item"><span class="contact-icon">📧</span><div><strong>E-Mail</strong><br><a href="mailto:secondbricksog@gmail.com">secondbricksog@gmail.com</a></div></div>
+          <div class="contact-item"><span class="contact-icon">📞</span><div><strong>Telefon</strong><br><a href="tel:+436642605426">0664 2605426</a></div></div>
+          <div class="contact-item"><span class="contact-icon">📍</span><div><strong>Adresse</strong><br>Breitenweg 13<br>8280 Fürstenfeld, Österreich</div></div>
+          <div class="contact-item"><span class="contact-icon">🏦</span><div><strong>IBAN</strong><br>AT15 2081 5000 4486 4015</div></div>
+          <div class="contact-item"><span class="contact-icon">📘</span><div><strong>Facebook</strong><br><a href="https://www.facebook.com/profile.php?id=100091775091211" target="_blank">SecondBricks & More</a></div></div>
+        </div>
+        <div>
+          <form onsubmit="handleSubmit(event, 'kontaktSuccess')">
+            <input type="text" placeholder="Ihr Name" required />
+            <input type="email" placeholder="E-Mail-Adresse" required />
+            <input type="tel" placeholder="Telefonnummer (optional)" />
+            <input type="text" placeholder="Betreff" />
+            <textarea placeholder="Ihre Nachricht …" required></textarea>
+            <button type="submit" class="btn">Nachricht senden</button>
+          </form>
+          <div class="form-success" id="kontaktSuccess">✅ Danke! Wir melden uns so bald wie möglich.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ IMPRESSUM ═══════════════ -->
+<div class="page" id="page-impressum">
+  <div class="section" style="background: var(--white);">
+    <div class="container">
+      <p class="section-label">Rechtliches</p>
+      <h2>Impressum</h2>
+      <div class="divider"></div>
+      <div class="legal-content">
+        <p style="color:var(--mid); font-size:0.88rem; margin-bottom:1.5rem;">Informationspflicht laut §5 E-Commerce Gesetz, §14 Unternehmensgesetzbuch, §63 Gewerbeordnung und Offenlegungspflicht laut §25 Mediengesetz.</p>
+        <div class="legal-box">
+          <p><strong>SecondBricks OG</strong></p>
+          <p>Firmenbuchnummer: FN 602162 h</p>
+          <p>Breitenweg 13, 8280 Fürstenfeld, Österreich</p>
+          <p style="margin-top:0.5rem;"><em>Als Kleinunternehmer im Sinne von § 6 Abs. 1 Ziff. 27 UStG wird keine Umsatzsteuer berechnet.</em></p>
+        </div>
+        <div class="legal-box">
+          <p><strong>Persönlich haftende Gesellschafter:</strong></p>
+          <p>David Schlener</p>
+          <p>Jennifer Stampfer</p>
+        </div>
+        <div class="legal-box">
+          <p><strong>Kontakt:</strong></p>
+          <p>Tel.: <a href="tel:+436642605426" style="color:var(--red);">0664 2605426</a></p>
+          <p>E-Mail: <a href="mailto:secondbricksog@gmail.com" style="color:var(--red);">secondbricksog@gmail.com</a></p>
+          <p>IBAN: AT15 2081 5000 4486 4015</p>
+        </div>
+        <h3>EU-Streitschlichtung</h3>
+        <p>Gemäß Verordnung über Online-Streitbeilegung in Verbraucherangelegenheiten (ODR-Verordnung) möchten wir Sie über die Online-Streitbeilegungsplattform (OS-Plattform) informieren. Verbraucher haben die Möglichkeit, Beschwerden an die Online Streitbeilegungsplattform der Europäischen Kommission unter <a href="http://ec.europa.eu/odr" target="_blank">http://ec.europa.eu/odr</a> zu richten.</p>
+        <p>Wir möchten Sie jedoch darauf hinweisen, dass wir nicht bereit oder verpflichtet sind, an Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen.</p>
+        <h3>Haftung für Inhalte dieser Webseite</h3>
+        <p>Wir entwickeln die Inhalte dieser Webseite ständig weiter und bemühen uns korrekte und aktuelle Informationen bereitzustellen. Leider können wir keine Haftung für die Korrektheit aller Inhalte auf dieser Webseite übernehmen, speziell für jene die seitens Dritter bereitgestellt wurden. Sollten Ihnen problematische oder rechtswidrige Inhalte auffallen, bitten wir Sie uns umgehend zu kontaktieren.</p>
+        <h3>Haftung für Links auf dieser Webseite</h3>
+        <p>Unsere Webseite enthält Links zu anderen Webseiten für deren Inhalt wir nicht verantwortlich sind. Haftung für verlinkte Websites besteht laut § 17 ECG für uns nicht, da wir keine Kenntnis rechtswidriger Tätigkeiten hatten und haben. Wenn Ihnen rechtswidrige Links auf unserer Website auffallen, bitten wir Sie uns zu kontaktieren.</p>
+        <h3>Urheberrechtshinweis</h3>
+        <p>Alle Inhalte dieser Webseite (Bilder, Fotos, Texte, Videos) unterliegen dem Urheberrecht. Falls notwendig, werden wir die unerlaubte Nutzung von Teilen der Inhalte unserer Seite rechtlich verfolgen.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ DATENSCHUTZ ═══════════════ -->
+<div class="page" id="page-datenschutz">
+  <div class="section" style="background: var(--white);">
+    <div class="container">
+      <p class="section-label">Rechtliches</p>
+      <h2>Datenschutzerklärung</h2>
+      <div class="divider"></div>
+      <div class="legal-content">
+        <h3>Einleitung und Überblick</h3>
+        <p>Wir haben diese Datenschutzerklärung (Fassung 09.11.2023) verfasst, um Ihnen gemäß der Vorgaben der Datenschutz-Grundverordnung (EU) 2016/679 und anwendbaren nationalen Gesetzen zu erklären, welche personenbezogenen Daten wir verarbeiten und welche rechtmäßigen Möglichkeiten Sie haben.</p>
+        <h3>Verantwortlicher</h3>
+        <div class="legal-box">
+          <p><strong>David Schlener</strong></p>
+          <p>Bismarckstraße 14a/Top 2, 8280 Fürstenfeld</p>
+          <p>E-Mail: <a href="mailto:davidol@gmx.at" style="color:var(--red);">davidol@gmx.at</a></p>
+          <p>Telefon: <a href="tel:+436642605426" style="color:var(--red);">+43 664 2605426</a></p>
+        </div>
+        <h3>Speicherdauer</h3>
+        <p>Wir speichern personenbezogene Daten nur so lange, wie es für die Bereitstellung unserer Dienstleistungen unbedingt notwendig ist. Daten werden gelöscht, sobald der Grund für die Datenverarbeitung nicht mehr vorhanden ist.</p>
+        <h3>Rechte laut Datenschutz-Grundverordnung</h3>
+        <p>Sie haben gemäß DSGVO folgende Rechte:</p>
+        <ul>
+          <li>Auskunftsrecht (Art. 15 DSGVO)</li>
+          <li>Recht auf Berichtigung (Art. 16 DSGVO)</li>
+          <li>Recht auf Löschung (Art. 17 DSGVO)</li>
+          <li>Recht auf Einschränkung der Verarbeitung (Art. 18 DSGVO)</li>
+          <li>Recht auf Datenübertragbarkeit (Art. 20 DSGVO)</li>
+          <li>Widerspruchsrecht (Art. 21 DSGVO)</li>
+          <li>Beschwerderecht bei der Aufsichtsbehörde (Art. 77 DSGVO)</li>
+        </ul>
+        <h3>Zuständige Datenschutzbehörde</h3>
+        <div class="legal-box">
+          <p><strong>Österreich Datenschutzbehörde</strong></p>
+          <p>Leiterin: Mag. Dr. Andrea Jelinek</p>
+          <p>Barichgasse 40-42, 1030 Wien</p>
+          <p>Tel.: +43 1 52 152-0</p>
+          <p>E-Mail: <a href="mailto:dsb@dsb.gv.at" style="color:var(--red);">dsb@dsb.gv.at</a></p>
+          <p>Website: <a href="https://www.dsb.gv.at/" target="_blank" style="color:var(--red);">www.dsb.gv.at</a></p>
+        </div>
+        <h3>Cookies</h3>
+        <p>Unsere Website verwendet HTTP-Cookies, um nutzerspezifische Daten zu speichern. Sie haben jederzeit die Möglichkeit, Cookies in Ihren Browser-Einstellungen zu verwalten, deaktivieren oder löschen.</p>
+        <h3>Webhosting</h3>
+        <p>Diese Website wird über GitHub Pages gehostet. Dabei können technische Daten wie IP-Adresse, Zeitpunkt des Besuchs und verwendeter Browser automatisch protokolliert werden. Die Rechtsgrundlage ist Art. 6 Abs. 1 lit. f DSGVO (berechtigte Interessen).</p>
+        <h3>Kontaktformular</h3>
+        <p>Wenn Sie uns über das Kontaktformular kontaktieren, werden die eingegebenen Daten (Name, E-Mail, Nachricht) zur Bearbeitung Ihrer Anfrage verwendet und gespeichert. Rechtsgrundlage: Art. 6 Abs. 1 lit. b DSGVO (Vertragserfüllung / vorvertragliche Maßnahmen).</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ FOOTER ═══════════════ -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div class="name">🧱 SecondBricks & More</div>
+      <p>Seltenes und gebrauchtes LEGO in Fürstenfeld. Mit der SecondBricks-Vollständigkeitsgarantie.</p>
+      <p style="margin-top:0.5rem;">secondbricksog@gmail.com · 0664 2605426</p>
+    </div>
+    <div class="footer-col">
+      <h4>Navigation</h4>
+      <a href="#" onclick="showPage('home')">Startseite</a>
+      <a href="#" onclick="showPage('ueber')">Über Uns</a>
+      <a href="#" onclick="showPage('shop')">Shop</a>
+      <a href="#" onclick="showPage('faq')">FAQ</a>
+      <a href="#" onclick="showPage('kontakt')">Kontakt</a>
+    </div>
+    <div class="footer-col">
+      <h4>Rechtliches</h4>
+      <a href="#" onclick="showPage('impressum')">Impressum</a>
+      <a href="#" onclick="showPage('datenschutz')">Datenschutz</a>
+      <a href="https://www.facebook.com/profile.php?id=100091775091211" target="_blank">Facebook</a>
+      <a href="https://store.bricklink.com/WSOSerious" target="_blank">Bricklink Shop</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>&copy; 2026 SecondBricks OG · FN 602162 h ·
+      <a href="#" onclick="showPage('impressum')">Impressum</a> ·
+      <a href="#" onclick="showPage('datenschutz')">Datenschutz</a>
+    </p>
+  </div>
+</footer>
+
+<script>
+  function showPage(id) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+    document.getElementById('page-' + id).classList.add('active');
+    const navEl = document.getElementById('nav-' + id);
+    if (navEl) navEl.classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    return false;
+  }
+  function toggleMenu() {
+    document.getElementById('mobileMenu').classList.toggle('open');
+  }
+  function toggleFaq(btn) {
+    const item = btn.closest('.faq-item');
+    const wasOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+    if (!wasOpen) item.classList.add('open');
+  }
+  function handleSubmit(e, successId) {
+    e.preventDefault();
+    const form = e.target;
+    form.style.display = 'none';
+    document.getElementById(successId).style.display = 'block';
+    setTimeout(() => {
+      form.reset();
+      form.style.display = 'flex';
+      document.getElementById(successId).style.display = 'none';
+    }, 6000);
+  }
+</script>
+</body>
+</html>
